@@ -1,0 +1,358 @@
+\documentclass[12pt, a4paper]{report}
+
+% --- PACKAGES ---
+% Typography and Encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fix-cm}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage[british]{babel}
+% Math and Symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{eurosym}
+
+% Graphics and Color
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usetikzlibrary{decorations.pathreplacing}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{threeparttablex}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\usepackage{rotating}
+
+% Layout and Floats
+\usepackage{geometry}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subfigure}
+\usepackage[subpreambles=false]{standalone}
+\usepackage{import}
+
+% Miscellaneous
+\usepackage{ulem}
+\usepackage{sectsty}
+\usepackage{comment}
+\usepackage{footmisc}
+\usepackage{xurl}
+\usepackage{natbib}
+\usepackage{multibib}
+
+% Hyperref (load last)
+\usepackage[hidelinks]{hyperref}
+
+% --- GLOBAL SPACING ---
+% University of Liverpool guidelines advise 1.5 spacing
+\usepackage{setspace}
+\onehalfspacing 
+
+% --- NUMBERING DEPTH ---
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{2}
+
+% --- DEFINITIONS AND COMPATIBILITY ---
+% Theorem Styles
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{hyp}{Hypothesis}
+\newtheorem{subhyp}{Hypothesis}[hyp]
+\renewcommand{\thesubhyp}{\thehyp\alph{subhyp}}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+
+% Custom Commands
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\blue}[1]{{\color{blue} #1}}
+\newcommand{\myredcolor}[1]{{\color{red}#1}}
+
+% Column Types
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\arraybackslash\hspace{0pt}}m{#1}}
+
+% Shortcuts
+\def\a{{\alpha}}
+\def\b{{\beta}}
+\def\g{\gamma}
+\def\p{\phi}
+\def\s{(1-\gamma^2)}
+\def\pc{{(1-\phi)}}
+\def\pr{{\frac{\phi}{1-\phi}}}
+\def\ss{{(2-\gamma^2)}}
+\def\de{{(4 - (2+\phi)\gamma^2)}}
+\def\t{{\tau}}
+
+% Compatibility for informs3 class commands found in papers
+\newcommand{\RUNTITLE}[1]{}
+\newcommand{\TITLE}[1]{\section*{#1}}
+\newcommand{\ARTICLEAUTHORS}[1]{}
+\newcommand{\AUTHOR}[1]{}
+\newcommand{\AFF}[1]{}
+\newcommand{\EMAIL}[1]{}
+\newcommand{\ABSTRACT}[1]{\noindent\textbf{Abstract:} #1\par\bigskip}
+\newcommand{\KEYWORDS}[1]{\noindent\textbf{Keywords:} #1\par\bigskip}
+\newcommand{\TheoremsNumberedThrough}{}
+\newcommand{\ECRepeatTheorems}{}
+\newcommand{\EquationsNumberedThrough}{}
+
+% --- THE "CHAPTER IMPORT" MACRO ---
+% This macro does the magic. It temporarily redefines headings 
+% and silences the bibliography just for the imported file.
+\newcommand{\importPaperAsChapter}[2]{%
+    \begingroup % Start a group to keep changes local
+        % 1. NO DEMOTION
+        % We map Paper \section to Thesis \section (2.1), not \subsection (2.0.1)
+        
+        % 2. SILENCE LOCAL BIBLIOGRAPHY
+        \renewcommand{\bibliography}[1]{}
+        \renewcommand{\bibliographystyle}[1]{}
+
+        % 3. PREVENT APPENDIX LEAKAGE
+        % We redefine \appendix to be a section within the current chapter (Paper)
+        % instead of changing the whole document to alphabetic chapters (A, B...)
+        \renewcommand{\appendix}{%
+            \par
+            \setcounter{section}{0}%
+            \setcounter{subsection}{0}%
+            % Switch numbering to Alphabetic for sections (2.A, 2.B)
+            \renewcommand{\thesection}{\thechapter.\Alph{section}}
+            
+            % Add "Appendix" to TOC
+            \addcontentsline{toc}{section}{Appendix}%
+            
+            % Stop writing subsequent sections to TOC (depth 0 shows chapters only)
+            \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}%
+        }
+        
+        % Handle informs3 APPENDIX environment locally
+        % In informs3, it's used as \begin{APPENDIX}{Title} ... \end{APPENDIX}
+        \ifx\APPENDIX\undefined
+            \newenvironment{APPENDIX}[1]{%
+               \appendix
+            }{}%
+        \else
+            \renewenvironment{APPENDIX}[1]{%
+               \appendix
+            }{}%
+        \fi
+
+        % 4. UNIFY FORMATTING (Font, Linespace, Title)
+        % Disable \maketitle so we don't get duplicate titles/authors
+        \let\maketitle\relax
+        \long\def\title##1{}
+        \long\def\author##1{}
+        \long\def\date##1{}
+        
+        % Silence informs3 specific title commands to avoid duplication
+        \renewcommand{\TITLE}[1]{}
+        \renewcommand{\RUNTITLE}[1]{}
+        
+        % Force consistent line spacing (ignore paper's preference)
+        \renewcommand{\doublespacing}{}
+        \renewcommand{\onehalfspacing}{}
+        \renewcommand{\singlespacing}{}
+
+        % 5. IMPORT THE FILE
+        \import{#1}{#2} 
+        
+        % Restore TOC depth for the next chapter (default is 2 for report class)
+        \addtocontents{toc}{\protect\setcounter{tocdepth}{2}}%
+    \endgroup % End group
+}
+
+\title{Determinants and Detection of Internal Control Opinion Shopping}
+\author{Jiaqi Wang}
+\date{}
+
+\begin{document}
+
+% --- TITLE PAGE (UoL Format) ---
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    \includegraphics[width=0.5\textwidth]{figures/logo.png}
+    \vspace{1cm}
+
+    {\Huge \bfseries Determinants and Detection of Internal Control Opinion Shopping \par}
+
+    \vspace{1cm}
+
+    \large
+    Thesis submitted in accordance with the requirements of the University of Liverpool for the degree of Doctor in Philosophy \\
+
+    \vspace{1cm}
+    by \\
+    Jiaqi Wang
+
+    \vspace{1cm}
+
+    {\Large January 2026 \par}
+
+    \vspace{1cm}
+
+    \textbf{Supervisors:} \\
+    Dr. Sardar Ahmad \\
+    Dr. Kostas Pappas
+
+\end{titlepage}
+
+\pagenumbering{roman}
+
+% --- ABSTRACT (UoL Format) ---
+\newpage
+\thispagestyle{plain}
+\begin{center}
+    {\Large \bfseries Abstract \par}
+    \vspace{0.5cm}
+\end{center}
+\begin{onehalfspace}
+    % Placeholder for abstract - max 450 words, single spaced.
+    % You can move the summary text from the Introduction chapter here.
+    This thesis investigates the determinants and detection of Internal Control Opinion Shopping (ICOS), a strategic behaviour where managers seek to avoid adverse internal control opinions by switching auditors or pressuring incumbents. Despite the regulatory importance of Internal Control over Financial Reporting (ICFR) following the Sarbanes-Oxley Act of 2002, understanding of why firms engage in ICOS and how to detect it remains limited. This thesis addresses these gaps through three related empirical studies.
+
+    The first study examines how capital market structure influences ICOS. Exploiting the exogenous variation from the SEC's 2016 Tick Size Pilot Program, it finds that a wider tick size leads to a significant reduction in ICOS. This effect is stronger for firms with lower institutional ownership and poorer financial reporting quality, suggesting that market microstructure reforms can alter reporting incentives and the information environment to deter opportunistic behaviour.
+
+    The second study investigates the role of supply chain relationships, specifically, the influence of major customers. Using a comprehensive sample of US firms, it documents that dependence on major corporate customers significantly increases the likelihood of ICOS. This relationship is more pronounced for firms with weaker internal controls or financial distress. The study highlights that concentrated customer relationships can create pressure for managers to conceal internal control deficiencies, with subsequent economic consequences including lower market valuations and higher executive compensation.
+
+    The third study develops a novel text-based approach to detect ICOS using narrative disclosures in Form 8-K filings. Applying BERTopic modelling to auditor change disclosures, it identifies specific narrative signals, such as discussions of consultations with successor auditors and material weaknesses, that predict ICOS. These signals provide a scalable tool for stakeholders to identify potential opinion shopping that traditional quantitative measures may miss.
+
+    Collectively, this thesis contributes a multi-dimensional framework for understanding ICOS, linking it to market friction, stakeholder influence, and disclosure narratives. The findings offer actionable implications for regulators, auditors, and investors in enhancing the integrity of financial reporting.
+\end{onehalfspace}
+\newpage
+
+% --- ACKNOWLEDGEMENTS ---
+\thispagestyle{plain}
+\begin{center}
+    {\Large \bfseries Acknowledgements \par}
+\end{center}
+\vspace{0.5cm}
+
+First and foremost, I would like to express my sincere gratitude to my supervisors, Dr. Sardar Ahmad and Dr. Kostas Pappas. I am deeply grateful for their expert guidance, insightful feedback, and the high academic standards they set for me. Their mentorship has been invaluable not only in shaping this thesis but also in refining my broader research capabilities. I deeply appreciate the time and effort they invested in my development, as well as their patience and understanding throughout the various stages of this project.
+
+
+Furthermore, I gratefully acknowledge the financial support provided by the Graduate Teaching Fellowship (GTF) at the University of Liverpool, which allowed me to focus wholeheartedly on my academic pursuits while gaining valuable teaching experience. I also extend my thanks to the wider academic community at the Management School. The supportive research environment, along with the constructive comments received from faculty and peers during seminars and workshops, significantly enriched this work.
+
+
+Crucially, a very special and heartfelt thank you goes to my partner, Dr. Wei Miao. He has been my rock and my sanctuary. Thank you for your unconditional love and for standing by me through the challenges and the most difficult periods of this journey. Your understanding—knowing when to offer silence when I needed quiet, and encouragement when I needed strength—was the force that kept me moving forward. I truly could not have completed this without you.
+
+
+Last but certainly not least, I am forever indebted to my beloved family, especially my mum, for their unwavering belief in me. I dedicate this thesis to the memory of my late father. Though you are no longer here to share in this moment, your love and the values you instilled in me have been my guiding light. You are deeply missed, and this achievement is for you.
+
+\newpage
+
+\tableofcontents
+\newpage
+\listoftables
+\newpage
+\listoffigures
+\newpage
+\pagenumbering{arabic}
+
+% --- INTRO ---
+\chapter{Introduction}
+
+In the wake of the major corporate accounting collapses of the early 2000s, regulators worldwide have enacted reforms to strengthen internal control over financial reporting (ICFR), aiming to improve financial reliability and rebuild investor trust. While jurisdictions such as China, Japan, and the United Kingdom have adopted varying approaches, the United States (US) context is particularly salient because the Sarbanes-Oxley Act (SOX) of 2002 established a comprehensive and rigorously enforced mandatory assurance regime. This stringent regulatory environment, combined with the depth of the US capital markets and extensive public disclosure requirements, provides a unique laboratory for examining the strategic interactions between firms and auditors regarding internal control opinions.
+
+Following the passage of SOX, the Securities and Exchange Commission (SEC) adopted final rules in 2003 to implement Section 404. Specifically, Section 404(a) mandates that management acknowledge responsibility for establishing and maintaining an adequate internal control structure and assess its effectiveness in an annual report.\footnote{\url{https://www.sec.gov/rules/final/33-8238.htm}} Complementing this, Section 404(b) requires the registered public accounting firm to attest to and report on the assessment made by management. To guide auditors in attesting to these controls, the Public Company Accounting Oversight Board (PCAOB) issued Auditing Standard No. 2 (AS 2) in 2004.\footnote{\url{https://pcaobus.org/oversight/standards/archived-standards/details/Auditing_Standard_2}} This early period was marked by a ``bottom-up'' approach, where auditors were expected to test clients' controls at a granular level. While effective in establishing a baseline for financial integrity, this methodology drew widespread criticism for being costly, particularly for smaller issuers \citep{krishnanCostsComplySOX2008, gohAuditorReportingSection2013}. In response to concerns regarding the efficiency and scalability of the initial standards, the SEC shifted towards a risk-based framework in 2007, clarifying that evaluations should be tailored to the specific risks of the entity rather than mirroring auditing procedures.\footnote{\url{https://www.sec.gov/rules/interp/2007/33-8810.pdf}} Concurrently, the PCAOB superseded AS 2 with Auditing Standard No. 5 (AS 5, later reorganized as AS 2201), which introduced a ``top-down, risk-based'' approach, instructing auditors to focus their testing on high-risk areas with a reasonable possibility of causing material misstatements.\footnote{\url{https://pcaobus.org/Rulemaking/Documents/021/2007-06-12_Release_No_2007-005A.pdf}}
+
+The PCAOB (AS 2201) defines a material weakness (MW) as ``a deficiency, or a combination of deficiencies, in internal control over financial reporting, such that there is a reasonable possibility that a material misstatement of the company's annual or interim financial statements will not be prevented or detected on a timely basis.''\footnote{\url{https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201}}  If the testing process identifies one or more MWs, the company's ICFR cannot be considered effective, and the auditor must express an adverse opinion on the effectiveness of internal control. By contrast, if only ``significant deficiencies'' are identified, the auditor is required to communicate such deficiencies in writing to the audit committee without the need to publicly disclose them in the audit opinion.\footnote{A significant deficiency is defined by PCAOB (AS 2201) as ``a deficiency, or a combination of deficiencies, in internal control over financial reporting that is less severe than a material weakness, yet important enough to merit attention by those responsible for oversight of the company's financial reporting.''}
+
+Previous research has documented a wide range of consequences for managers of receiving a material weakness opinion. First, firms face significant capital market penalties. \cite{ashbaugh-skaifeEffectSOXInternal2009} find that firms reporting internal control deficiencies face higher idiosyncratic and systematic risk, resulting in a significantly higher cost of equity capital. Similarly, \cite{hammersleyMarketReactionsDisclosure2008} document a negative stock price reaction to the disclosure of material weaknesses in ICFR. They also find that the market reaction is more pronounced for weaknesses that are more severe or difficult to audit. Second, an adverse opinion leads to higher costs in the debt market. \cite{kimInternalControlWeakness2011} show that banks charge higher loan rates, approximately 28 basis points higher, and impose tighter non-price terms on borrowers with material weaknesses. Corroborating this, \cite{costelloImpactFinancialReporting2011} find that lenders reduce their reliance on financial covenants and financial reporting numbers for such borrowers, substituting them with price and security protections or credit-rating-based provisions. Third, executives face personal career risks and reduced compensations. \cite{hoitashInternalControlMaterial2012} find that CFOs experience a reduction in total compensation, driven by lower bonuses and equity awards, following the disclosure of material weaknesses. \cite{liFinancialExecutiveQualifications2010} further document that firms receiving adverse opinions experience higher CFO turnover and that subsequent opinion improvement depends on hiring better-qualified replacements.
+
+From an agency theory perspective, the relationship between shareholders (principals) and managers (agents) is characterized by a divergence of interests and information asymmetry \citep[e.g.,][]{jensenTheoryFirmManagerial2019}. While shareholders seek to maximise firm value, managers may prioritise their own private benefits, such as compensation, reputation, and job security. The audit function serves as a critical monitoring mechanism designed to mitigate these agency costs by independently verifying management's assertions. However, because managers possess superior information about the firm's internal controls and can influence the auditor selection process, they may opportunistically exploit this information asymmetry to conceal internal control deficiencies. By doing so, they avoid the reputational and financial penalties associated with adverse opinions, thereby prioritising their personal utility over shareholder interests. Against this backdrop, internal control opinion shopping (ICOS) refers to managerial efforts to obtain a more favourable internal control opinion by strategically switching auditors or retaining an incumbent auditor that is more likely to issue a clean internal control opinion \citep{lennoxCompaniesSuccessfullyEngage2000}.
+
+The extant literature on internal control opinion shopping can be broadly categorised into two streams: studies documenting its existence and those identifying its determinants. First, a large body of work documents that opinion shopping is a real phenomenon rather than a purely conjectural concern. Early studies on financial statement audit opinions use auditor switching as a proxy for shopping and generally find little evidence that switches lead to cleaner opinions \citep{chowQualifiedAuditOpinions1982, smithAuditorSubjectOpinions1986, krishnanAuditorSwitchingConservatism1994}. \cite{lennoxCompaniesSuccessfullyEngage2000} shows that these comparisons can understate audit opinion shopping because they omit the counterfactual opinion absent a switch and ignore non-switchers; using a ``what-if'' framework that compares predicted clean-opinion probabilities under retention and switching, he finds pervasive evidence of successful opinion shopping in the UK. More recent work demonstrates that shopping incentives extend to high-stakes reporting settings such as going-concern opinions \citep{chungOpinionShoppingAvoid2019} and that capital market participants respond negatively to auditor changes perceived as opportunistic \citep{chungKoreanEvidenceAuditor2021}. In the post-SOX environment, the focus gradually shifts to internal control opinions: applying the Lennox framework to ICFR, \cite{newtonInternalControlOpinion2016} provide the first large-scale evidence that US firms can successfully shop for clean internal control opinions, consistent with concerns that auditor changes may be exploited by management to avoid reporting material weaknesses.
+
+Second, a smaller but growing literature examines the determinants of ICOS. \cite{newtonInternalControlOpinion2016} show that ICOS is more pronounced in more competitive audit markets, measured by the Herfindahl index and spatial competition measures, suggesting that competition can increase clients' ability to obtain favourable reporting from successor auditors. Beyond audit market structure, market-wide sentiment and monitoring also matter: \cite{aminInvestorSentimentAudit2021} find that ICOS is more prevalent when investor sentiment is high and monitoring is weak (e.g., low institutional ownership), consistent with reduced investor scrutiny lowering the expected costs of opportunistic switching. Finally, informal relationships can shape constraints on auditor independence. In China's context, \cite{duDoesCEOAuditor2022} document that stronger dialect-based CEO--auditor social ties facilitate opinion shopping.
+
+Overall, despite its regulatory importance, the empirical evidence on why and when firms engage in ICOS remains relatively limited \citep{defondReviewArchivalAuditing2014}, motivating further research on its determinants and timely detection. This thesis addresses these gaps by examining ICOS from two main perspectives. First, it investigates the determinants of ICOS by exploring how financial market microstructure (Chapter~\ref{chap:paper1}) and contractual relationships with major customers (Chapter~\ref{chap:paper2}) shape managers' incentives to shop for clean internal control opinions. Second, it addresses the challenge of detection by developing a novel text-based approach using narrative disclosures in regulatory filings (Chapter~\ref{chap:paper3}). The overarching aim of this thesis is to provide further empirical evidence on when firms engage in ICOS and how this behaviour can be detected, thereby shedding light on the robustness of ICFR as a governance mechanism.
+
+More specifically, Chapter~\ref{chap:paper1} investigates a capital market-level determinant of ICOS. This study examines whether an exogenous change in market friction, specifically, a widened tick size, affects a firm’s propensity to engage in ICOS. The minimum price increment, or ``tick size,'' sets the smallest allowable difference between quoted prices in equity markets. To assess whether wider tick sizes could improve market quality for small-cap stocks, the SEC introduced the 2016 Tick Size Pilot Program (TSPP), which increased the tick size from one cent to five cents for a subset of small-cap firms. While prior tick size studies mainly focus on liquidity, trading activity, and market quality, they provide limited evidence on how tick size reforms affect firms’ financial reporting incentives or auditor-related decisions. The theoretical effect is ambiguous ex ante: on one hand, a wider tick size can decrease liquidity and institutional monitoring, reducing the costs of opportunistic behaviour and potentially increasing ICOS. On the other hand, a wider tick size may also increase the information acquisition of fundamental investors, leading to closer scrutiny that deters ICOS. This study employs a difference-in-differences research design to test this relationship using a sample of small-cap firms enrolled in the TSPP over the 2010--2018 period. The results reveal that the wider tick size led to a significant decrease in ICOS among treated firms. Cross-sectional analyses indicate that this effect is more pronounced for firms with lower institutional ownership and lower pre-treatment financial reporting quality. This chapter provides the first evidence that a market microstructure reform, i.e., a wider tick size, can reduce ICOS by altering firms’ reporting incentives and the information environment, extending opinion shopping research to the domain of market design.
+
+Chapter~\ref{chap:paper2} focuses on external stakeholder influence by examining how contractual dependence on major customers in the supply chain affects suppliers’ incentives to change auditors for internal control opinion shopping. Using a comprehensive sample of US public firms from 2004 to 2022, the study finds that firms with major customers are significantly more likely to engage in opportunistic auditor changes for ICOS, with the presence of a major customer increasing this likelihood by about 26\% relative to the sample average. Cross-sectional analyses show that this effect is driven primarily by corporate (rather than government) customers. Further, the effect is stronger for firms with weaker internal control quality (e.g., prior restatements or audited by non-Big 4 auditors) and for firms facing financial distress or earnings pressure, and is weaker for firms with higher vertical integration that are less dependent on external customers. Additional analyses indicate that ICOS-motivated auditor changes are followed by a lower incidence of losses but also by lower market valuations and higher executive compensation, highlighting how concentrated customer relationships can encourage opportunistic auditor changes with important consequences for financial reporting quality, market pricing, and managerial incentives. By identifying major customers as a key contractual stakeholder that increases ICOS incentives, this chapter extends ICOS research from firm internal governance characteristics to concrete supply-chain dependencies.
+
+Chapter~\ref{chap:paper3} addresses the challenge of detecting internal control opinion shopping, which is difficult to observe directly because firms rarely disclose their motivations for auditor changes. This chapter investigates whether narrative disclosures in Form 8-K (Item 4.01) auditor change filings can be used to help detect ICOS. Under SEC regulations, firms must file Form 8-K (Item 4.01) to report auditor changes, including narrative disclosures about the reasons for the change and any disagreements with the former auditor. This study applies a Bidirectional Encoder Representations from Transformers (BERT)-based topic modelling technique (BERTopic) to firms with these disclosures between 2010 and 2024 and identifies four key thematic clusters: first, disclosures involving consultations with successor auditors regarding accounting practices and reportable events; second, material weaknesses in internal control over financial reporting; third, the selection process of the independent audit firm by the audit committee; and fourth, audit committee authorization for the predecessor to respond to inquiries regarding material weaknesses. These findings demonstrate that disclosure narratives contain signals of ICOS that are not captured by traditional measures, offering a scalable tool for regulators and investors to flag potentially opportunistic auditor switches.
+
+Collectively, these three chapters contribute to the accounting and auditing literature by providing a comprehensive and novel examination of internal control opinion shopping. By linking market structure, stakeholder dependence, and disclosure narratives, the thesis extends the ICOS research beyond documenting its existence to developing a multi-dimensional framework of its determinants and an implementable text-based detection approach. This integrated perspective deepens our understanding of the robustness and vulnerabilities of ICFR as a governance mechanism. These findings have important implications for regulators such as the SEC and PCAOB in designing and evaluating market structure rules (e.g., tick size regimes), targeting inspections and enforcement towards high-risk auditor changes, and refining disclosure requirements around internal control opinions and auditor switches. They also help auditors and audit committees in identifying circumstances in which ICOS risk is elevated and provide investors with new textual indicators to better assess the motivations and risks underlying an auditor change.
+
+\vspace{12pt}
+\noindent \textbf{Note on Spelling Conventions}: This thesis is submitted in a paper-based format (PhD by publication route). Chapters \ref{chap:paper1}, \ref{chap:paper2}, and \ref{chap:paper3} are prepared for submission to international journals and therefore follow American English spelling conventions. The remainder of the thesis adheres to British English spelling, following the University of Liverpool's requirements.
+
+% --- PAPER 1 ---
+% We create the Chapter title MANUALLY in the master file
+\chapter{Tick Size and Internal Control Opinion Shopping: Evidence from the 2016 SEC Tick Size Program}\label{chap:paper1}
+% Then we import the paper. The macro will turn the paper's \section into \subsection
+% Usage: \importPaperAsChapter{folder_path/}{filename.tex}
+\importPaperAsChapter{papers/paper1/}{main.tex}
+
+% --- PAPER 2 ---
+\chapter{Major Customers and Opportunistic Auditor Change for Opinion Shopping}\label{chap:paper2}
+\importPaperAsChapter{papers/paper2/}{main.tex}
+
+% --- PAPER 3 ---
+\chapter{Narrative Signals of Internal Control Opinion Shopping: Evidence from Form 8-K Disclosures}\label{chap:paper3}
+\importPaperAsChapter{papers/paper3/}{main.tex}
+
+% --- CONCLUSION ---
+\chapter{Conclusion}
+
+\section{Summary of Findings}
+
+This thesis examines internal control opinion shopping (ICOS), a strategic behaviour whereby managers attempt to avoid adverse internal control opinions by switching auditors or influencing the reporting decision of incumbent auditors. The central aim is twofold: first, to identify when and why firms have stronger incentives to engage in ICOS; and second, to develop approaches that help detect ICOS in a timely and scalable way. Chapters \ref{chap:paper1}--\ref{chap:paper3} address these objectives through three complementary empirical studies that jointly highlight how ICOS is shaped by capital-market frictions, contractual stakeholder pressure, and the information content of disclosure narratives.
+
+Chapter \ref{chap:paper1} examines whether an exogenous change in market friction affects ICOS by exploiting the SEC's 2016 Tick Size Pilot Program. The evidence indicates that a wider tick size is associated with a reduction in ICOS among treated firms. The results are consistent with the view that market design can alter the information environment and monitoring intensity in ways that discipline opportunistic reporting behaviour.
+
+Chapter \ref{chap:paper2} investigates whether supply-chain dependence, proxied by the presence of major customers, affects firms' propensity to engage in opportunistic auditor changes consistent with ICOS. Using a broad panel of US public firms, the study documents that suppliers with major customers are more likely to change auditors in a manner consistent with ICOS. The association is strongest when customer relationships plausibly intensify economic pressure and when firms face weaker reporting environments or tighter performance constraints, and it is attenuated when organisational features reduce dependence on external customers. Additional analyses further suggest that the market recognises and penalises such behaviour even when reported performance improves following the switch.
+
+Chapter \ref{chap:paper3} develops a text-based approach that uses narrative disclosures in Form 8-K (Item 4.01) auditor-change filings to detect ICOS. Applying transformer-based topic modelling, it shows that specific disclosure themes, particularly those detailing consultations with successor auditors and material weaknesses in internal control, contain systematic signals that predict ICOS. This evidence demonstrates that timely disclosures can provide useful information for identifying potentially opportunistic auditor changes.
+
+Taken together, the thesis provides an integrated view of ICOS that links incentives and constraints across the trading environment, inter-firm contracting, and disclosure narratives. This multi-dimensional perspective moves beyond documenting the existence of ICOS to clarifying its determinants and outlining implementable approaches for detection.
+
+\section{Theoretical and Practical Implications}
+
+The findings across the three essays yield implications for research on auditing and financial reporting, as well as for regulators and market participants concerned with the credibility of internal control reporting.
+
+\subsection{Theoretical Implications}
+
+First, the thesis extends the ICOS literature by identifying determinants that operate outside the traditional focus on audit-market competition and broad governance proxies. The evidence that a market microstructure intervention can shift ICOS behaviour suggests that the information environment created by trading rules can affect reporting incentives and auditor-choice outcomes, providing a novel channel through which capital-market design intersects with financial reporting.
+
+Second, the findings highlight the importance of contractual stakeholders in shaping reporting behaviour. By showing that dependence on major customers is associated with a greater propensity to engage in ICOS, the thesis connects supply-chain economics to auditing outcomes and provides evidence that reporting incentives can be materially influenced by concentrated customer relationships.
+
+Third, the text-based evidence indicates that disclosures surrounding auditor changes are not purely boilerplate: narrative content contains economically meaningful signals about auditor--client frictions and the conditions under which ICOS is more likely. This complements archival identification approaches by demonstrating that the motives and constraints surrounding auditor changes leave traces in contemporaneous disclosure language.
+
+\subsection{Practical Implications}
+
+The results suggest several practical implications for oversight and decision-making. For regulators and standard setters, risk-based monitoring can incorporate both firm characteristics (e.g., customer dependence) and disclosure-based indicators to prioritise scrutiny of auditor changes with elevated ICOS risk. More broadly, the evidence implies that market structure rules may have governance spillovers that are relevant when evaluating reforms.
+
+For auditors and audit committees, auditor change decisions warrant particular attention in settings where incentives to avoid adverse internal control opinions are plausibly high. Incorporating information about major customer dependence and carefully assessing the narrative circumstances surrounding a switch can strengthen engagement risk assessments and governance oversight.
+
+For investors and analysts, auditor-change disclosures can be informative inputs into assessments of reporting risk. Narrative cues related to disagreements, reportable events, and other frictions can help investors interpret whether an auditor change is more likely to reflect routine rotation versus elevated governance and reporting concerns.
+
+\section{Limitations and Future Research}
+
+This thesis is subject to limitations that suggest avenues for future research. First, ICOS is inherently difficult to observe, and the empirical identification relies on model-based counterfactual inference; while widely used, such measures may not capture all instances of shopping intent or may be sensitive to modelling choices. Second, the evidence is primarily situated in the US regulatory environment under SOX and related disclosure rules, which may limit generalisability to jurisdictions with different internal control regimes and auditor-change reporting requirements. Third, the tick size setting is based on a specific policy experiment affecting small-cap firms, and the customer-dependence setting relies on disclosure-based identification of major customers; both contexts invite further validation in other institutional settings and with alternative measures.
+
+Future work could explore additional capital-market interventions that change monitoring and information acquisition, identify plausibly exogenous shocks to customer dependence to strengthen causal inference, and extend text-based detection to other disclosure venues (e.g., annual reports or earnings calls). Combining structured firm characteristics with narrative signals may also improve the timeliness and precision of screening tools designed for regulators and investors.
+
+\section{Concluding Remarks}
+
+ICFR reporting is intended to strengthen financial reporting credibility, yet it can be strategically influenced when managers have incentives and opportunities to obtain more favourable internal control opinions. By documenting determinants that arise from the trading environment and supply-chain relationships, and by developing a narrative-based detection approach, this thesis advances understanding of when ICOS is more likely to occur and how it can be identified. Overall, the evidence underscores that safeguarding the integrity of internal control reporting requires attention not only to auditing institutions, but also to the broader information and contracting environments in which auditor choices are made.
+
+\bibliographystyle{aer}
+\bibliography{master_references}
+
+\end{document}

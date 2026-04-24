@@ -1,0 +1,9 @@
+[submodule "papers/paper1"]
+	path = papers/paper1
+	url = git@github.com:gakijqw/overleaf-TSPP-ICOS.git
+[submodule "papers/paper2"]
+	path = papers/paper2
+	url = git@github.com:gakijqw/overleaf-MajorCustomerICOS.git
+[submodule "papers/paper3"]
+	path = papers/paper3
+	url = git@github.com:gakijqw/overleaf-8k-ICOS.git
