@@ -1,0 +1,123 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[british]{babel}
+\usepackage{microtype}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xr}
+
+% Read labels from the thesis main document so that \pageref{viva:...}
+% resolves to the current printed page in the revised thesis.
+\externaldocument{main}
+
+\onehalfspacing
+
+\title{Response to Minor Corrections Requested by the Examiners}
+\author{Jiaqi Wang\\[2pt]\normalsize Supervisors: Dr.\ Sardar Ahmad \& Dr.\ Kostas Pappas}
+\date{\today}
+
+\newcommand{\thesistitle}{Determinants and Detection of Internal Control Opinion Shopping}
+
+% Shorthand: "now at p.~X" where X is resolved from main.aux
+\newcommand{\nowat}[1]{(now at p.~\pageref{#1})}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Thesis title:} \thesistitle\\
+\noindent\textbf{Examiners:} Dr Nikos Tsileponis (University of Bristol) \& Dr Steven Chen (University of Liverpool)\\
+\noindent\textbf{Minor corrections letter:} 27 March 2026
+
+\vspace{1em}
+
+I am very grateful to the examiners for their careful reading of the thesis and for the constructive corrections they raised. All eight typographical / cross-reference corrections and all seven clarifications and acknowledgements have been incorporated into the revised thesis. For each item below, I restate the examiner's point, quote the original and revised wording where applicable, and provide the corresponding page number in the revised thesis.
+
+\section{Typographical and Cross-Reference Corrections}
+
+\subsection*{T1. Institutional ownership direction (examiner p.~8, Chapter 1)}
+\textit{Examiner:} ``lower institutional ownership'' should be ``higher institutional ownership.''
+
+\noindent\textbf{Response.} The direction of the cross-sectional effect has been corrected both in the Chapter~1 introduction \nowat{viva:c1-io} and in the Chapter~2 abstract \nowat{viva:c2-abstract-io}. The revised sentence now reads: ``Cross-sectional analyses indicate that this effect is more pronounced for firms with \emph{higher} institutional ownership and lower pre-treatment financial reporting quality.'' This correction is consistent with the revised narrative of Section~2.4.3.1 (see item C3 below).
+
+\subsection*{T2. ``theoratical'' $\rightarrow$ ``theoretical'' (examiner p.~18, Chapter 2)}
+\textit{Examiner:} ``theoratical'' should read ``theoretical''.
+
+\noindent\textbf{Response.} Corrected \nowat{viva:c2-theoretical}. The sentence now reads: ``We summarize the \emph{theoretical} framework in Figure~2.1, which we detail below.''
+
+\subsection*{T3. ``Table 1'' $\rightarrow$ ``Table 2.1'' (examiner p.~24, Chapter 2)}
+\textit{Examiner:} ``Table 1 shows that'' should read ``Table 2.1 shows that''.
+
+\noindent\textbf{Response.} Corrected \nowat{viva:c2-table21}. The table reference has been updated so that it correctly reads ``Table 2.1'' in the revised thesis.
+
+\subsection*{T4. ``Section 3.3'' $\rightarrow$ ``Section 2.2.3'' (examiner p.~30, Chapter 2)}
+\textit{Examiner:} Cross-reference to ``Section 3.3'' is incorrect and should read ``Section 2.2.3'' (Hypothesis Development within Chapter~2).
+
+\noindent\textbf{Response.} Corrected \nowat{viva:c2-section223}. The revised sentence now reads: ``As discussed in the Hypothesis Development section (Section~2.2.3), receiving adverse internal control opinions\ldots''.
+
+\subsection*{T5. ``ICOS Lennox (2000)'' $\rightarrow$ ``ICOS (Lennox, 2000)'' (examiner p.~40, Chapter 2)}
+\textit{Examiner:} ``ICOS Lennox (2000)'' should read ``(Lennox, 2000)'' with parentheses.
+
+\noindent\textbf{Response.} Corrected \nowat{viva:c2-citep}. The revised sentence reads: ``Firms with lower financial reporting quality have a higher incentive to engage in ICOS (Lennox, 2000).''
+
+\subsection*{T6. ICOS variable definition, Condition~(2) (examiner p.~44, Chapter 2 Appendix)}
+\textit{Examiner:} Condition~(2) currently compares $P_0$ to itself: ``\ldots the predicted probabilities of receiving MW when dismissal is set to 0 is less than the predicted probabilities when dismissal is set to 0''. It should read ``\ldots when dismissal is set to 1 is greater than when dismissal is set to 0'' (i.e., $P_1 > P_0$).
+
+\noindent\textbf{Response.} Corrected \nowat{viva:c2-icosdef}. The revised definition in the Appendix now reads: ``(1)~the predicted probabilities of receiving MW when dismissal is set to 1 is \emph{less than} the predicted probabilities when dismissal is set to 0 and dismissal is actually 1; (2)~the predicted probabilities of receiving MW when dismissal is set to 0 is \emph{less than} the predicted probabilities when dismissal is set to 1 and dismissal is actually 0.'' The two conditions are now properly stated as $P_1 < P_0$ (with actual dismissal) and $P_0 < P_1$ (i.e., $P_1 > P_0$, with actual retention), consistent with the Lennox (2000) framework.
+
+\subsection*{T7. ``examines'' $\rightarrow$ ``examine'' (examiner p.~54, Chapter 3)}
+\textit{Examiner:} ``Campello and Gao (2017) examines'' should read ``Campello and Gao (2017) examine''.
+
+\noindent\textbf{Response.} Corrected \nowat{viva:c3-campello}. The sentence now reads: ``Campello and Gao (2017) \emph{examine} how the credit market assesses a firm's customer-base profile\ldots''.
+
+\subsection*{T8. Chapter 4 sample period (examiner p.~6, Chapter 1)}
+\textit{Examiner:} The sample period for Chapter~4 is stated as ``between 2010 and 2024'' but should read ``between 2008 and 2024''.
+
+\noindent\textbf{Response.} Corrected \nowat{viva:c1-sample}. The revised Chapter~1 introduction now describes the Chapter~4 sample as ``firms with these disclosures \emph{between 2008 and 2024}'', consistent with the sample period reported in Chapter~4.
+
+\section{Clarifications and Acknowledgements}
+
+\subsection*{C1. Chapter 2: overall auditor switching rate}
+\textit{Examiner:} The study does not examine whether the TSPP affected overall auditor switching rates. If total switching declined for treated firms, the reduction in ICOS could be partly mechanical.
+
+\noindent\textbf{Response.} A new acknowledgement has been added to the concluding discussion of Chapter~2 \nowat{viva:c2-switching}. I now state that the study does not examine whether the TSPP reduced the overall rate of auditor switching among treated firms, and that, if total auditor changes declined for treated firms post-TSPP irrespective of their opportunistic nature, the observed reduction in measured ICOS may be partly mechanical rather than wholly reflecting a change in opportunistic behaviour.
+
+\subsection*{C2. Chapter 2: limitations of the ICOS measure}
+\textit{Examiner:} A brief acknowledgement of the limitations of the ICOS measure would strengthen the thesis.
+
+\noindent\textbf{Response.} A new paragraph in Chapter~2's conclusion acknowledges these limitations \nowat{viva:c2-measure}. I note that, while the Lennox (2000) framework is widely applied in the ICOS literature, it relies on probabilistic estimates from a first-stage probit model that may be subject to measurement error; that the classification of a firm-year as ICOS is sensitive to the specification of the first-stage model; and that the framework cannot distinguish truly strategic auditor changes from switches that are correlated with, but not driven by, the desire to avoid adverse internal control opinions. This motivates suggestions for alternative approaches in future research.
+
+\subsection*{C3. Chapter 2, Section 2.4.3.1 (Institutional Ownership): narrative revision}
+\textit{Examiner:} The results in Table~2.7 on institutional ownership and financial reporting quality appear somewhat internally inconsistent. The discussion should be revised to develop the pressure that institutional investors may exert on managers, rather than focusing primarily on a monitoring effect.
+
+\noindent\textbf{Response.} The discussion in Section~2.4.3.1 has been rewritten to align with the evidence in Table~2.7 \nowat{viva:c2-pressure}. The revised narrative develops a ``performance pressure'' channel: large institutional investors impose implicit governance penalties on managers whose firms receive adverse internal control opinions (higher debt costs, reduced managerial compensation, reputational costs), so managers at high-IO firms face stronger \emph{ex-ante} incentives to avoid a material-weakness opinion and are therefore more responsive to any regulatory change that alters the cost--benefit calculus of ICOS. I now argue that this pressure-amplification mechanism, rather than differential monitoring capacity, explains why the TSPP treatment effect is concentrated among firms with higher institutional ownership. This revision is consistent with correction T1 above.
+
+\subsection*{C4. Chapter 3: expanded discussion of the executive-compensation tension}
+\textit{Examiner:} If markets detect and penalise ICOS (lower Tobin's Q), why do boards reward executives with higher compensation? Possible explanations (e.g., compensation contracts tied to accounting metrics that ICOS improves; boards not detecting ICOS; timing differences) could be briefly mentioned.
+
+\noindent\textbf{Response.} The passage has been expanded \nowat{viva:c3-comp} with three non-mutually-exclusive explanations. First, executive compensation contracts are frequently tied to accounting-based performance metrics, the very metrics that ICOS mechanically improves, so a board that has not renegotiated the contract \emph{ex post} may reward executives on face value even when underlying economic performance deteriorates. Second, boards themselves may fail to detect ICOS in real time, given that opinion shopping is structurally opaque and information asymmetries are largest for firms with internal-control weaknesses. Third, there is a timing wedge: compensation awards are typically determined using current-year accounting performance, whereas the market discount in Tobin's~Q reflects investors' forward-looking discounting of future cash flows and reputational risk, so the two can point in opposite directions contemporaneously.
+
+\subsection*{C5. Chapter 3: conclusion on observational design and time-varying omitted variables}
+\textit{Examiner:} A brief acknowledgement in the conclusion that, unlike Chapter~2's natural experiment, the observational design with firm and year fixed effects cannot fully address time-varying omitted variables, notwithstanding the lagged customer-concentration tests and propensity score matching.
+
+\noindent\textbf{Response.} A new limitations paragraph has been added to Chapter~3's conclusion \nowat{viva:c3-cov}. The paragraph explicitly contrasts the identification strategy with the natural-experiment setting of Chapter~2, notes that firm and year fixed effects absorb time-invariant firm heterogeneity and common temporal shocks but cannot fully rule out time-varying omitted variables, and states that the lagged customer-concentration tests and propensity score matching provide partial, rather than complete, mitigation of this concern. The findings are therefore interpreted as evidence of a robust conditional association whose causal interpretation is strengthened, but not fully identified, by the battery of robustness checks reported.
+
+\subsection*{C6. Chapter 4: Topic~6 and the first-stage probit}
+\textit{Examiner:} A brief acknowledgement that Topic~6 may partly capture the same underlying signal that enters the first-stage probit would strengthen the discussion. Clarify whether Topic~6 provides incremental information beyond what is already captured in the first-stage model.
+
+\noindent\textbf{Response.} The discussion of Topic~6 has been extended accordingly \nowat{viva:c4-topic6}. The revised text acknowledges that Topic~6 may partly capture the same underlying signal as the first-stage probit, since the probit includes lagged material-weakness status and firms disclosing material weaknesses in their 8-K filings likely have internal-control problems that mechanically increase the predicted probability of an adverse opinion. I clarify that Topic~6 nonetheless captures the \emph{narrative act of disclosure} in the contemporaneous auditor-change filing, which is conceptually distinct from the \emph{historical material-weakness indicator} used in estimation; and that the fact that Topic~6 retains a statistically significant coefficient in the joint specification (Column~5 of Table~4.3) after controlling for the other topics and firm characteristics suggests that the narrative signal provides incremental information beyond the first-stage model.
+
+\subsection*{C7. Chapter 4: limitations and future research (AI / machine learning)}
+\textit{Examiner:} A brief acknowledgement of the limitations of the current model and research design, with reflections on promising avenues for future research given advances in AI and machine learning.
+
+\noindent\textbf{Response.} The Chapter~4 conclusion now includes a discussion of the limitations of the BERTopic design and reflections on future directions \nowat{viva:c4-future}. I note that BERTopic relies on sentence-level BERT embeddings and unsupervised clustering, which, while effective at identifying coherent topics, does not fully exploit document-level context or the sequential structure of disclosures. I further discuss how rapid advances in large language models (LLMs) and transformer architectures suggest that future work could leverage supervised fine-tuning or few-shot classification approaches to improve detection accuracy; I also point to real-time monitoring systems integrating topic-based screening with more sophisticated LLMs as an avenue for future research, while emphasising that the interpretability of BERTopic's discrete topic clusters remains an important advantage for regulatory applications where transparency is desirable.
+
+\vspace{1em}
+
+\noindent I thank the examiners once again for their thoughtful feedback, which has substantially strengthened the final thesis.
+
+\end{document}
